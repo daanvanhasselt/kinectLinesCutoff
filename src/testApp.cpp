@@ -24,7 +24,7 @@ void testApp::setup(){
     glEnable(GL_DEPTH_TEST);
     ofEnableSmoothing();
     
-    shader.load("shaders/shader");
+    shader.load("shaders/shader");          // load in the shader
 }
 
 //--------------------------------------------------------------
@@ -92,19 +92,25 @@ void testApp::draw(){
         for(int y = 0; y < numRows; y++){
             ofSetLineWidth(2);
             ofNoFill();
-            ofBeginShape();
-            for(int x = 0; x < numCols; x++){
-                int index = y * numCols + x;
-                ofPoint prevPoint = *points[ ofClamp(index - 1, 0, numCols * numRows - 1) ];
-                ofPoint curPoint = *points[ ofClamp(index, 0, numCols * numRows - 1) ];
-                if(fabs(prevPoint.z - curPoint.z) > 100){
-                    ofEndShape();
-                    ofBeginShape();
+            
+            // start shader
+            shader.begin();
+            
+                ofBeginShape();
+                for(int x = 0; x < numCols; x++){
+                    int index = y * numCols + x;
+                    ofPoint prevPoint = *points[ ofClamp(index - 1, 0, numCols * numRows - 1) ];
+                    ofPoint curPoint = *points[ ofClamp(index, 0, numCols * numRows - 1) ];
+                    if(fabs(prevPoint.z - curPoint.z) > 100){
+                        ofEndShape();
+                        ofBeginShape();
+                    }
+                    ofVertex(curPoint);
                 }
-                ofVertex(curPoint);
-//                ofCurveVertex(curPoint);
-            }
-            ofEndShape();
+                ofEndShape();
+            
+            // end shader
+            shader.end();
         }
     }
     

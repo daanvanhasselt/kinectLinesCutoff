@@ -14,5 +14,5 @@ public:
     int numRows;
     vector<ofVec3f *> points;
     
-    ofShader shader;
+    ofShader shader;    // declare the shader
 };
